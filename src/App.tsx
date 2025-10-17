@@ -1,11 +1,17 @@
 import React, { useState, useCallback } from 'react';
+import { AuthProvider } from '@/context/AuthContext';
 import { TaskProvider } from '@/context/TaskContext';
 import { TaskTable } from '@/components/TaskTable';
 import { TaskForm } from '@/components/TaskForm';
 import { TaskFiltersComponent } from '@/components/TaskFilters';
 import { BulkActions } from '@/components/BulkActions';
+import { HomePage } from '@/components/HomePage';
+import { LoginForm } from '@/components/LoginForm';
+import { SignupForm } from '@/components/SignupForm';
+import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useTaskContext } from '@/context/TaskContext';
+import { useAuth } from '@/context/AuthContext';
 import { KeyboardShortcut } from '@/types';
 import { debounce } from '@/utils';
 import {
@@ -14,9 +20,12 @@ import {
   FiX,
   FiCheckSquare,
   FiSearch,
+  FiUser,
+  FiLogOut,
 } from 'react-icons/fi';
 
 const AppContent: React.FC = () => {
+  const { user, logout } = useAuth();
   const { searchParams, setSearchQuery } = useTaskContext();
   const [isTaskFormOpen, setIsTaskFormOpen] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
@@ -56,6 +65,10 @@ const AppContent: React.FC = () => {
 
   useKeyboardShortcuts(shortcuts);
 
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -64,7 +77,29 @@ const AppContent: React.FC = () => {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
               <FiCheckSquare className="h-8 w-8 text-blue-600" />
-              <h1 className="text-2xl font-bold text-gray-900">Todo List</h1>
+              <h1 className="text-2xl font-bold text-gray-900">TodoPro</h1>
+            </div>
+
+            {/* User Menu */}
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
+                {user?.avatar && (
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    className="h-8 w-8 rounded-full"
+                  />
+                )}
+                <span className="text-gray-700 font-medium">Welcome, {user?.name}</span>
+              </div>
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                title="Sign out"
+              >
+                <FiLogOut className="h-4 w-4" />
+                <span>Sign Out</span>
+              </button>
             </div>
           </div>
         </div>
@@ -188,11 +223,68 @@ const AppContent: React.FC = () => {
   );
 };
 
-const App: React.FC = () => {
+const AuthenticatedApp: React.FC = () => {
   return (
     <TaskProvider>
       <AppContent />
     </TaskProvider>
+  );
+};
+
+const App: React.FC = () => {
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false);
+
+  const handleShowLogin = () => {
+    setShowLogin(true);
+    setShowSignup(false);
+  };
+
+  const handleShowSignup = () => {
+    setShowSignup(true);
+    setShowLogin(false);
+  };
+
+  const handleCloseModals = () => {
+    setShowLogin(false);
+    setShowSignup(false);
+  };
+
+  const handleSwitchToSignup = () => {
+    setShowLogin(false);
+    setShowSignup(true);
+  };
+
+  const handleSwitchToLogin = () => {
+    setShowSignup(false);
+    setShowLogin(true);
+  };
+
+  return (
+    <AuthProvider>
+      <ProtectedRoute
+        fallback={
+          <>
+            <HomePage
+              onLogin={handleShowLogin}
+              onSignup={handleShowSignup}
+            />
+            <LoginForm
+              isOpen={showLogin}
+              onClose={handleCloseModals}
+              onSwitchToSignup={handleSwitchToSignup}
+            />
+            <SignupForm
+              isOpen={showSignup}
+              onClose={handleCloseModals}
+              onSwitchToLogin={handleSwitchToLogin}
+            />
+          </>
+        }
+      >
+        <AuthenticatedApp />
+      </ProtectedRoute>
+    </AuthProvider>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useReducer, useCallback, useEffect } 
 import { Task, TaskFormData, TaskContextType, TaskFilters, TaskSort, TaskSearchParams, TaskStatus } from '@/types';
 import { mockApi } from '@/services/mockApi';
 import { filterTasks, searchTasks, sortTasks, debounce } from '@/utils';
+import { useAuth } from './AuthContext';
 
 type TaskAction =
   | { type: 'SET_LOADING'; payload: boolean }
@@ -165,16 +166,24 @@ interface TaskProviderProps {
 
 export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(taskReducer, initialState);
+  const { user, isAuthenticated } = useAuth();
 
-  // Load tasks on mount
+  // Load tasks when user changes
   useEffect(() => {
-    loadTasks();
-  }, []);
+    if (isAuthenticated && user) {
+      loadTasks();
+    } else {
+      // Clear tasks when not authenticated
+      dispatch({ type: 'SET_TASKS', payload: [] });
+    }
+  }, [isAuthenticated, user?.id]);
 
   const loadTasks = async () => {
+    if (!user) return;
+
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      const response = await mockApi.getAllTasks();
+      const response = await mockApi.getUserTasks(user.id);
       if (response.success) {
         dispatch({ type: 'SET_TASKS', payload: response.data });
       } else {
@@ -186,9 +195,11 @@ export const TaskProvider: React.FC<TaskProviderProps> = ({ children }) => {
   };
 
   const addTask = async (taskData: TaskFormData) => {
+    if (!user) return;
+
     dispatch({ type: 'SET_LOADING', payload: true });
     try {
-      const response = await mockApi.createTask(taskData);
+      const response = await mockApi.createTask({ ...taskData, userId: user.id });
       if (response.success) {
         dispatch({ type: 'ADD_TASK', payload: response.data });
       } else {

@@ -20,7 +20,22 @@ class MockApiService {
     } catch (error) {
       console.error('Failed to load tasks from storage:', error);
     }
-    return this.getInitialTasks();
+    return [];
+  }
+
+  private loadUserTasks(userId: string): Task[] {
+    const allTasks = this.loadTasksFromStorage();
+    const userTasks = allTasks.filter(task => task.userId === userId);
+
+    // If user has no tasks, create initial tasks for them
+    if (userTasks.length === 0) {
+      const initialTasks = this.getInitialTasks(userId);
+      const updatedTasks = [...allTasks, ...initialTasks];
+      this.saveTasksToStorage(updatedTasks);
+      return initialTasks;
+    }
+
+    return userTasks;
   }
 
   private saveTasksToStorage(tasks: Task[]): void {
@@ -31,7 +46,7 @@ class MockApiService {
     }
   }
 
-  private getInitialTasks(): Task[] {
+  private getInitialTasks(userId: string): Task[] {
     const now = new Date();
     const tomorrow = new Date(now);
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -41,6 +56,7 @@ class MockApiService {
     return [
       {
         id: generateId(),
+        userId,
         title: 'Welcome to your Todo App!',
         description: 'This is a sample task to get you started. You can edit, delete, or mark it as complete.',
         status: 'pending',
@@ -52,6 +68,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Complete project documentation',
         description: 'Write comprehensive documentation for the new feature implementation.',
         status: 'in_progress',
@@ -63,6 +80,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Buy groceries',
         description: 'Milk, bread, eggs, and vegetables for the week.',
         status: 'pending',
@@ -74,6 +92,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Team meeting preparation',
         description: 'Prepare slides and agenda for the weekly team meeting.',
         status: 'completed',
@@ -402,6 +421,25 @@ class MockApiService {
     }
   }
 
+  async getUserTasks(userId: string): Promise<ApiResponse<Task[]>> {
+    await this.delay(API_DELAYS.READ);
+
+    try {
+      const tasks = this.loadUserTasks(userId);
+      return {
+        data: tasks,
+        success: true,
+        message: 'User tasks loaded successfully',
+      };
+    } catch (error) {
+      return {
+        data: [],
+        success: false,
+        error: 'Failed to load user tasks',
+      };
+    }
+  }
+
   async createTask(taskData: TaskFormData): Promise<ApiResponse<Task>> {
     await this.delay(API_DELAYS.CREATE);
 
@@ -411,6 +449,7 @@ class MockApiService {
 
       const newTask: Task = {
         id: generateId(),
+        userId: taskData.userId || '',
         title: taskData.title,
         description: taskData.description,
         status: 'pending',

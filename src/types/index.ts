@@ -8,6 +8,7 @@ export type SortOrder = 'asc' | 'desc';
 
 export interface Task {
   id: string;
+  userId: string;
   title: string;
   description?: string;
   status: TaskStatus;
@@ -25,6 +26,7 @@ export interface TaskFormData {
   priority: TaskPriority;
   dueDate?: Date;
   tags: string[];
+  userId?: string;
 }
 
 export interface TaskFilters {
@@ -96,3 +98,49 @@ export type KeyboardShortcut = {
   action: () => void;
   description: string;
 };
+
+// User and Authentication Types
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  avatar?: string;
+  createdAt: Date;
+  lastLoginAt?: Date;
+}
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  name: string;
+  avatar?: string;
+}
+
+export interface LoginFormData {
+  email: string;
+  password: string;
+  rememberMe?: boolean;
+}
+
+export interface SignupFormData {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface AuthContextType {
+  user: AuthUser | null;
+  isAuthenticated: boolean;
+  loading: boolean;
+  error: string | null;
+
+  // Auth operations
+  login: (credentials: LoginFormData) => Promise<void>;
+  signup: (userData: SignupFormData) => Promise<void>;
+  logout: () => void;
+  clearError: () => void;
+
+  // User operations
+  updateProfile: (updates: Partial<AuthUser>) => Promise<void>;
+}
