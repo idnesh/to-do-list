@@ -124,7 +124,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto" style={{ height: '100%', maxHeight: 'calc(100vh - 120px)' }}>
           {/* Error display */}
           {errors.length > 0 && (
             <div className="bg-red-50 border border-red-200 rounded-md p-3">

@@ -136,7 +136,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto" style={{ height: '100%', maxHeight: 'calc(100vh - 120px)' }}>
           {/* Read-only notice for completed tasks */}
           {isReadOnly && (
             <div className="bg-green-50 border border-green-200 rounded-md p-3 mb-4">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { TaskProvider } from '@/context/TaskContext';
 import { TaskTable } from '@/components/TaskTable';
 import { TaskForm } from '@/components/TaskForm';
@@ -7,18 +7,30 @@ import { BulkActions } from '@/components/BulkActions';
 import { useKeyboardShortcuts } from '@/hooks/useKeyboardShortcuts';
 import { useTaskContext } from '@/context/TaskContext';
 import { KeyboardShortcut } from '@/types';
+import { debounce } from '@/utils';
 import {
   FiPlus,
   FiHelpCircle,
   FiX,
   FiCheckSquare,
+  FiSearch,
 } from 'react-icons/fi';
 
 const AppContent: React.FC = () => {
-  const { searchParams } = useTaskContext();
+  const { searchParams, setSearchQuery } = useTaskContext();
   const [isTaskFormOpen, setIsTaskFormOpen] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
+  const [searchInput, setSearchInput] = useState(searchParams.query || '');
 
+  const debouncedSetSearchQuery = useCallback(
+    debounce((query: string) => setSearchQuery(query), 300),
+    [setSearchQuery]
+  );
+
+  const handleSearchChange = (value: string) => {
+    setSearchInput(value);
+    debouncedSetSearchQuery(value);
+  };
 
   const shortcuts: KeyboardShortcut[] = [
     {
@@ -48,7 +60,7 @@ const AppContent: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
               <FiCheckSquare className="h-8 w-8 text-blue-600" />
@@ -59,99 +71,118 @@ const AppContent: React.FC = () => {
       </header>
 
       {/* Main content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="space-y-6">
-          {/* Filters and search */}
-          <TaskFiltersComponent />
-
-          {/* Action buttons */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              {/* Add task button */}
-              <button
-                onClick={() => setIsTaskFormOpen(true)}
-                className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-                title="New task (Ctrl+N)"
-              >
-                <FiPlus className="h-4 w-4" />
-                <span>New Task</span>
-              </button>
-            </div>
-
-            <div className="flex items-center gap-3">
-              {/* Help button */}
-              <button
-                onClick={() => setShowHelp(true)}
-                className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
-                title="Keyboard shortcuts (/)"
-              >
-                <FiHelpCircle className="h-4 w-4" />
-                <span>Help</span>
-              </button>
-            </div>
+      <main className="mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex gap-6">
+          {/* Left sidebar - Filters */}
+          <div className="w-80 flex-shrink-0">
+            <TaskFiltersComponent />
           </div>
 
-          {/* Bulk actions */}
-          <BulkActions />
+          {/* Right content area */}
+          <div className="flex-1 space-y-6">
+            {/* Action buttons */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                {/* Add task button */}
+                <button
+                  onClick={() => setIsTaskFormOpen(true)}
+                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                  title="New task (Ctrl+N)"
+                >
+                  <FiPlus className="h-4 w-4" />
+                  <span>New Task</span>
+                </button>
+              </div>
 
-          {/* Task table */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-            <TaskTable searchQuery={searchParams.query} />
-          </div>
-
-          {/* Task creation form */}
-          <TaskForm
-            isOpen={isTaskFormOpen}
-            onClose={() => setIsTaskFormOpen(false)}
-            mode="create"
-          />
-
-          {/* Keyboard shortcuts help modal */}
-          {showHelp && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
-            <div className="flex items-center justify-between p-6 border-b">
-              <h2 className="text-xl font-semibold text-gray-900">Keyboard Shortcuts</h2>
-              <button
-                onClick={() => setShowHelp(false)}
-                className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
-              >
-                <FiX className="h-5 w-5" />
-              </button>
+              <div className="flex items-center gap-3">
+                {/* Help button */}
+                <button
+                  onClick={() => setShowHelp(true)}
+                  className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                  title="Keyboard shortcuts (/)"
+                >
+                  <FiHelpCircle className="h-4 w-4" />
+                  <span>Help</span>
+                </button>
+              </div>
             </div>
-            <div className="p-6">
-              <div className="space-y-3">
-                {shortcuts.map((shortcut, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">{shortcut.description}</span>
-                    <div className="flex items-center gap-1">
-                      {shortcut.ctrlKey && (
+
+            {/* Search tasks */}
+            <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
+              <div className="relative">
+                <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+                <input
+                  type="text"
+                  placeholder="Search tasks..."
+                  value={searchInput}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            {/* Bulk actions */}
+            <BulkActions />
+
+            {/* Task table */}
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+              <TaskTable searchQuery={searchParams.query} />
+            </div>
+          </div>
+        </div>
+
+        {/* Task creation form */}
+        <TaskForm
+          isOpen={isTaskFormOpen}
+          onClose={() => setIsTaskFormOpen(false)}
+          mode="create"
+        />
+
+        {/* Keyboard shortcuts help modal */}
+        {showHelp && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+              <div className="flex items-center justify-between p-6 border-b">
+                <h2 className="text-xl font-semibold text-gray-900">Keyboard Shortcuts</h2>
+                <button
+                  onClick={() => setShowHelp(false)}
+                  className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <FiX className="h-5 w-5" />
+                </button>
+              </div>
+              <div className="p-6">
+                <div className="space-y-3">
+                  {shortcuts.map((shortcut, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <span className="text-sm text-gray-600">{shortcut.description}</span>
+                      <div className="flex items-center gap-1">
+                        {shortcut.ctrlKey && (
+                          <kbd className="px-2 py-1 text-xs bg-gray-100 border border-gray-300 rounded">
+                            Ctrl
+                          </kbd>
+                        )}
+                        {shortcut.altKey && (
+                          <kbd className="px-2 py-1 text-xs bg-gray-100 border border-gray-300 rounded">
+                            Alt
+                          </kbd>
+                        )}
+                        {shortcut.shiftKey && (
+                          <kbd className="px-2 py-1 text-xs bg-gray-100 border border-gray-300 rounded">
+                            Shift
+                          </kbd>
+                        )}
                         <kbd className="px-2 py-1 text-xs bg-gray-100 border border-gray-300 rounded">
-                          Ctrl
+                          {shortcut.key}
                         </kbd>
-                      )}
-                      {shortcut.altKey && (
-                        <kbd className="px-2 py-1 text-xs bg-gray-100 border border-gray-300 rounded">
-                          Alt
-                        </kbd>
-                      )}
-                      {shortcut.shiftKey && (
-                        <kbd className="px-2 py-1 text-xs bg-gray-100 border border-gray-300 rounded">
-                          Shift
-                        </kbd>
-                      )}
-                      <kbd className="px-2 py-1 text-xs bg-gray-100 border border-gray-300 rounded">
-                        {shortcut.key}
-                      </kbd>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-          )}
-        </div>
+        )}
       </main>
     </div>
   );

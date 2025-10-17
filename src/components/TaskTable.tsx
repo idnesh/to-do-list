@@ -26,13 +26,13 @@ interface TaskTableProps {
 interface TaskRowProps {
   task: Task;
   isSelected: boolean;
+  onEdit: (task: Task) => void;
+  onDelete: (task: Task) => void;
+  onReminder: (task: Task) => void;
 }
 
-const TaskRow: React.FC<TaskRowProps> = ({ task, isSelected }) => {
-  const { deleteTask, toggleTaskStatus, selectTask, loading } = useTaskContext();
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showReminderModal, setShowReminderModal] = useState(false);
+const TaskRow: React.FC<TaskRowProps> = ({ task, isSelected, onEdit, onDelete, onReminder }) => {
+  const { toggleTaskStatus, selectTask } = useTaskContext();
 
   const handleToggleStatus = () => {
     toggleTaskStatus(task.id);
@@ -40,37 +40,6 @@ const TaskRow: React.FC<TaskRowProps> = ({ task, isSelected }) => {
 
   const handleToggleSelect = () => {
     selectTask(task.id);
-  };
-
-  const handleEdit = () => {
-    setShowEditModal(true);
-  };
-
-  const handleDeleteClick = () => {
-    setShowDeleteModal(true);
-  };
-
-  const handleConfirmDelete = async () => {
-    await deleteTask(task.id);
-    setShowDeleteModal(false);
-  };
-
-  const handleCancelDelete = () => {
-    setShowDeleteModal(false);
-  };
-
-  const handleRemindMe = () => {
-    setShowReminderModal(true);
-  };
-
-  const handleReminderConfirm = (reminderTime: Date) => {
-    // For now, we'll show a simple alert. In a real app, this would set up notifications
-    alert(`Reminder set for task: "${task.title}" at ${reminderTime.toLocaleString()}`);
-    setShowReminderModal(false);
-  };
-
-  const handleReminderCancel = () => {
-    setShowReminderModal(false);
   };
 
   const getStatusIcon = () => {
@@ -197,21 +166,21 @@ const TaskRow: React.FC<TaskRowProps> = ({ task, isSelected }) => {
       <td className="px-2 py-1">
         <div className="flex items-center gap-0.5">
           <button
-            onClick={handleEdit}
+            onClick={() => onEdit(task)}
             className="p-0.5 text-blue-500 hover:text-blue-700 transition-colors rounded"
             title="Edit task"
           >
             <FiEdit3 className="h-3 w-3" />
           </button>
           <button
-            onClick={handleRemindMe}
+            onClick={() => onReminder(task)}
             className="p-0.5 text-orange-500 hover:text-orange-700 transition-colors rounded"
             title="Set reminder"
           >
             <FiBell className="h-3 w-3" />
           </button>
           <button
-            onClick={handleDeleteClick}
+            onClick={() => onDelete(task)}
             className="p-0.5 text-red-500 hover:text-red-700 transition-colors rounded"
             title="Delete task"
           >
@@ -220,41 +189,48 @@ const TaskRow: React.FC<TaskRowProps> = ({ task, isSelected }) => {
         </div>
       </td>
 
-      {/* Edit Task Modal */}
-      <EditTaskModal
-        isOpen={showEditModal}
-        task={task}
-        onClose={() => setShowEditModal(false)}
-      />
-
-      {/* Delete Confirmation Modal */}
-      <DeleteConfirmationModal
-        isOpen={showDeleteModal}
-        taskTitle={task.title}
-        onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
-        loading={loading}
-      />
-
-      {/* Reminder Modal */}
-      <ReminderModal
-        isOpen={showReminderModal}
-        taskTitle={task.title}
-        onConfirm={handleReminderConfirm}
-        onCancel={handleReminderCancel}
-        loading={loading}
-      />
     </tr>
   );
 };
 
 export const TaskTable: React.FC<TaskTableProps> = ({ searchQuery }) => {
-  const { tasks, selectedTasks, loading, error, selectAllTasks } = useTaskContext();
+  const { tasks, selectedTasks, loading, error, selectAllTasks, deleteTask } = useTaskContext();
   const allSelected = selectedTasks.length === tasks.length && tasks.length > 0;
   const someSelected = selectedTasks.length > 0 && selectedTasks.length < tasks.length;
 
+  // Modal state management
+  const [editModalTask, setEditModalTask] = useState<Task | null>(null);
+  const [deleteModalTask, setDeleteModalTask] = useState<Task | null>(null);
+  const [reminderModalTask, setReminderModalTask] = useState<Task | null>(null);
+
   const handleSelectAll = () => {
     selectAllTasks();
+  };
+
+  const handleEdit = (task: Task) => {
+    setEditModalTask(task);
+  };
+
+  const handleDelete = (task: Task) => {
+    setDeleteModalTask(task);
+  };
+
+  const handleReminder = (task: Task) => {
+    setReminderModalTask(task);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (deleteModalTask) {
+      await deleteTask(deleteModalTask.id);
+      setDeleteModalTask(null);
+    }
+  };
+
+  const handleReminderConfirm = (reminderTime: Date) => {
+    if (reminderModalTask) {
+      alert(`Reminder set for task: "${reminderModalTask.title}" at ${reminderTime.toLocaleString()}`);
+      setReminderModalTask(null);
+    }
   };
 
   if (loading) {
@@ -368,6 +344,9 @@ export const TaskTable: React.FC<TaskTableProps> = ({ searchQuery }) => {
                 key={task.id}
                 task={task}
                 isSelected={selectedTasks.includes(task.id)}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onReminder={handleReminder}
               />
             ))}
           </tbody>
@@ -394,6 +373,29 @@ export const TaskTable: React.FC<TaskTableProps> = ({ searchQuery }) => {
           </div>
         </div>
       </div>
+
+      {/* Modals - rendered outside table structure */}
+      <EditTaskModal
+        isOpen={!!editModalTask}
+        task={editModalTask}
+        onClose={() => setEditModalTask(null)}
+      />
+
+      <DeleteConfirmationModal
+        isOpen={!!deleteModalTask}
+        taskTitle={deleteModalTask?.title || ''}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setDeleteModalTask(null)}
+        loading={loading}
+      />
+
+      <ReminderModal
+        isOpen={!!reminderModalTask}
+        taskTitle={reminderModalTask?.title || ''}
+        onConfirm={handleReminderConfirm}
+        onCancel={() => setReminderModalTask(null)}
+        loading={loading}
+      />
     </div>
   );
 };
