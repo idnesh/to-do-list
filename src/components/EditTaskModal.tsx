@@ -3,7 +3,7 @@ import { Task, TaskFormData, TaskPriority } from '@/types';
 import { useTaskContext } from '@/context/TaskContext';
 import { validateTaskForm } from '@/utils';
 import { TASK_PRIORITIES, DEFAULT_TAGS } from '@/constants';
-import { FiX, FiPlus, FiCalendar, FiFlag, FiTag } from 'react-icons/fi';
+import { FiX, FiCalendar, FiFlag, FiTag } from 'react-icons/fi';
 
 interface EditTaskModalProps {
   isOpen: boolean;
@@ -121,7 +121,7 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-modal">
+      <div className="bg-white rounded-lg shadow-xl w-full" style={{ maxWidth: '60rem' }}>
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
           <h2 className="text-xl font-semibold text-gray-900">
@@ -195,60 +195,64 @@ export const EditTaskModal: React.FC<EditTaskModalProps> = ({
             />
           </div>
 
-          {/* Status (read-only display) */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Current Status
-            </label>
-            <div className="px-3 py-2 bg-gray-50 border border-gray-300 rounded-md">
-              <span className="text-sm text-gray-600 capitalize">
-                {task.status.replace('_', ' ')}
-              </span>
+          {/* Status, Priority, and Due Date in one row */}
+          <div className="grid grid-cols-3 gap-4">
+            {/* Status (read-only display) */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Current Status
+              </label>
+              <div className="px-3 py-2 bg-gray-50 border border-gray-300 rounded-md">
+                <span className="text-sm text-gray-600 capitalize">
+                  {task.status.replace('_', ' ')}
+                </span>
+              </div>
             </div>
-          </div>
 
-          {/* Priority */}
-          <div>
-            <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-1">
-              <FiFlag className="inline h-4 w-4 mr-1" />
-              Priority
-            </label>
-            <select
-              id="priority"
-              value={formData.priority}
-              onChange={(e) => handleInputChange('priority', e.target.value as TaskPriority)}
-              className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                isReadOnly ? 'bg-gray-50 cursor-not-allowed' : ''
-              }`}
-              disabled={isReadOnly}
-            >
-              {TASK_PRIORITIES.map((priority) => (
-                <option key={priority.value} value={priority.value}>
-                  {priority.label}
-                </option>
-              ))}
-            </select>
-          </div>
+            {/* Priority */}
+            <div>
+              <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-1">
+                <FiFlag className="inline h-4 w-4 mr-1" />
+                Priority
+              </label>
+              <select
+                id="priority"
+                value={formData.priority}
+                onChange={(e) => handleInputChange('priority', e.target.value as TaskPriority)}
+                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  isReadOnly ? 'bg-gray-50 cursor-not-allowed' : ''
+                }`}
+                disabled={isReadOnly}
+              >
+                {TASK_PRIORITIES.map((priority) => (
+                  <option key={priority.value} value={priority.value}>
+                    {priority.label}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-          {/* Due Date */}
-          <div>
-            <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 mb-1">
-              <FiCalendar className="inline h-4 w-4 mr-1" />
-              Due Date
-            </label>
-            <input
-              id="dueDate"
-              type="datetime-local"
-              value={formData.dueDate ? formData.dueDate.toISOString().slice(0, 16) : ''}
-              onChange={(e) =>
-                handleInputChange('dueDate', e.target.value ? new Date(e.target.value) : undefined)
-              }
-              className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                isReadOnly ? 'bg-gray-50 cursor-not-allowed' : ''
-              }`}
-              min={new Date().toISOString().slice(0, 16)}
-              readOnly={isReadOnly}
-            />
+            {/* Due Date */}
+            <div>
+              <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 mb-1">
+                <FiCalendar className="inline h-4 w-4 mr-1" />
+                Due Date
+              </label>
+              <input
+                id="dueDate"
+                type="datetime-local"
+                value={formData.dueDate ? formData.dueDate.toISOString().slice(0, 16) : ''}
+                onChange={(e) => {
+                  const newDate = e.target.value ? new Date(e.target.value) : undefined;
+                  handleInputChange('dueDate', newDate as Date);
+                }}
+                className={`w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  isReadOnly ? 'bg-gray-50 cursor-not-allowed' : ''
+                }`}
+                min={new Date().toISOString().slice(0, 16)}
+                readOnly={isReadOnly}
+              />
+            </div>
           </div>
 
           {/* Tags */}
