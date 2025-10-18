@@ -57,11 +57,11 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected, isDragging
   const getStatusIcon = () => {
     switch (task.status) {
       case 'completed':
-        return <FiCheck className="text-green-500" />;
+        return <FiCheck className="text-green-500 dark:text-green-400" />;
       case 'in_progress':
-        return <FiPlay className="text-blue-500" />;
+        return <FiPlay className="text-blue-500 dark:text-blue-400" />;
       default:
-        return <FiPause className="text-gray-500" />;
+        return <FiPause className="text-gray-500 dark:text-gray-400" />;
     }
   };
 
@@ -81,12 +81,12 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected, isDragging
   return (
     <div
       className={`
-        task-item bg-white border rounded-lg p-4 shadow-sm transition-all duration-200 hover:shadow-md
-        ${isSelected ? 'ring-2 ring-blue-500 border-blue-200' : 'border-gray-200'}
+        task-item bg-white dark:bg-gray-800 border rounded-lg p-4 shadow-sm transition-all duration-300 hover:shadow-md dark:hover:shadow-gray-900/30
+        ${isSelected ? 'ring-2 ring-blue-500 dark:ring-blue-400 border-blue-200 dark:border-blue-600' : 'border-gray-200 dark:border-gray-700'}
         ${isDragging ? 'opacity-50 transform rotate-1' : ''}
         ${task.status === 'completed' ? 'opacity-75' : ''}
-        ${isTaskOverdue ? 'border-l-4 border-l-red-500' : ''}
-        ${isTaskDueToday ? 'border-l-4 border-l-yellow-500' : ''}
+        ${isTaskOverdue ? 'border-l-4 border-l-red-500 dark:border-l-red-400' : ''}
+        ${isTaskDueToday ? 'border-l-4 border-l-yellow-500 dark:border-l-yellow-400' : ''}
       `}
     >
       <div className="flex items-start gap-3">
@@ -95,7 +95,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected, isDragging
           type="checkbox"
           checked={isSelected}
           onChange={handleToggleSelect}
-          className="mt-1 h-4 w-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+          className="mt-1 h-4 w-4 text-blue-600 dark:text-blue-400 rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-blue-500 dark:focus:ring-blue-400 transition-colors duration-300"
         />
 
         {/* Task content */}
@@ -104,7 +104,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected, isDragging
           <div className="flex items-center gap-2 mb-2">
             <button
               onClick={handleToggleStatus}
-              className="flex-shrink-0 hover:scale-110 transition-transform"
+              className="flex-shrink-0 hover:scale-110 transition-transform duration-300"
               title={`Mark as ${task.status === 'completed' ? 'pending' : task.status === 'pending' ? 'in progress' : 'completed'}`}
             >
               {getStatusIcon()}
@@ -117,13 +117,13 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected, isDragging
                 onChange={(e) => setEditTitle(e.target.value)}
                 onBlur={handleSaveEdit}
                 onKeyDown={handleKeyDown}
-                className="flex-1 text-lg font-medium border-none outline-none focus:ring-1 focus:ring-blue-500 rounded px-1"
+                className="flex-1 text-lg font-medium border-none outline-none bg-transparent text-gray-900 dark:text-white focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400 rounded px-1 transition-colors duration-300"
                 autoFocus
               />
             ) : (
               <h3
-                className={`flex-1 text-lg font-medium cursor-pointer hover:text-blue-600 transition-colors ${
-                  task.status === 'completed' ? 'line-through text-gray-500' : 'text-gray-900'
+                className={`flex-1 text-lg font-medium cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-300 ${
+                  task.status === 'completed' ? 'line-through text-gray-500 dark:text-gray-400' : 'text-gray-900 dark:text-white'
                 }`}
                 onClick={handleEdit}
               >
@@ -151,7 +151,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected, isDragging
 
           {/* Description */}
           {task.description && (
-            <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-2 transition-colors duration-300">
               {task.description}
             </p>
           )}
@@ -162,7 +162,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected, isDragging
               {task.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center px-2 py-1 text-xs font-medium bg-gray-100 text-gray-700 rounded-md"
+                  className="inline-flex items-center px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-md transition-colors duration-300"
                 >
                   {tag}
                 </span>
@@ -171,19 +171,19 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected, isDragging
           )}
 
           {/* Footer with metadata */}
-          <div className="flex items-center justify-between text-xs text-gray-500">
+          <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
             <div className="flex items-center gap-3">
               {/* Due date */}
               {task.dueDate && (
                 <div
-                  className={`flex items-center gap-1 ${
-                    isTaskOverdue ? 'text-red-600' : isTaskDueToday ? 'text-yellow-600' : ''
+                  className={`flex items-center gap-1 transition-colors duration-300 ${
+                    isTaskOverdue ? 'text-red-600 dark:text-red-400' : isTaskDueToday ? 'text-yellow-600 dark:text-yellow-400' : ''
                   }`}
                 >
                   <FiCalendar className="h-3 w-3" />
                   <span>{formatDate(task.dueDate)}</span>
-                  {isTaskOverdue && <span className="text-red-600 font-medium">(Overdue)</span>}
-                  {isTaskDueToday && <span className="text-yellow-600 font-medium">(Due Today)</span>}
+                  {isTaskOverdue && <span className="text-red-600 dark:text-red-400 font-medium transition-colors duration-300">(Overdue)</span>}
+                  {isTaskDueToday && <span className="text-yellow-600 dark:text-yellow-400 font-medium transition-colors duration-300">(Due Today)</span>}
                 </div>
               )}
 
@@ -211,14 +211,14 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, isSelected, isDragging
         <div className="flex flex-col gap-1">
           <button
             onClick={handleEdit}
-            className="p-1 text-gray-400 hover:text-blue-500 transition-colors"
+            className="p-1 text-gray-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors duration-300 rounded"
             title="Edit task"
           >
             <FiEdit3 className="h-4 w-4" />
           </button>
           <button
             onClick={handleDelete}
-            className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+            className="p-1 text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-300 rounded"
             title="Delete task"
           >
             <FiTrash2 className="h-4 w-4" />

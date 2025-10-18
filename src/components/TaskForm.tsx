@@ -108,16 +108,16 @@ export const TaskForm: React.FC<TaskFormProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full" style={{ maxWidth: '60rem' }}>
+    <div className="fixed inset-0 bg-black bg-opacity-50 dark:bg-black dark:bg-opacity-70 flex items-center justify-center p-4 z-50">
+      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl w-full transition-colors duration-300" style={{ maxWidth: '60rem' }}>
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold text-gray-900">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white transition-colors duration-300">
             {mode === 'create' ? 'Create New Task' : 'Edit Task'}
           </h2>
           <button
             onClick={onClose}
-            className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
+            className="p-1 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-300 rounded"
           >
             <FiX className="h-5 w-5" />
           </button>
@@ -127,8 +127,8 @@ export const TaskForm: React.FC<TaskFormProps> = ({
         <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto" style={{ height: '100%', maxHeight: 'calc(100vh - 120px)' }}>
           {/* Error display */}
           {errors.length > 0 && (
-            <div className="bg-red-50 border border-red-200 rounded-md p-3">
-              <ul className="text-sm text-red-600 space-y-1">
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-md p-3 transition-colors duration-300">
+              <ul className="text-sm text-red-600 dark:text-red-400 space-y-1 transition-colors duration-300">
                 {errors.map((error, index) => (
                   <li key={index}>• {error}</li>
                 ))}
@@ -138,7 +138,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
 
           {/* Title */}
           <div>
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 transition-colors duration-300">
               Title *
             </label>
             <input
@@ -147,7 +147,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
               value={formData.title}
               onChange={(e) => handleInputChange('title', e.target.value)}
               placeholder="Enter task title..."
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors duration-300"
               maxLength={200}
               required
             />
@@ -155,7 +155,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
 
           {/* Description */}
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 transition-colors duration-300">
               Description
             </label>
             <textarea
@@ -164,7 +164,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
               onChange={(e) => handleInputChange('description', e.target.value)}
               placeholder="Enter task description..."
               rows={3}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent resize-none transition-colors duration-300"
             />
           </div>
 
@@ -172,7 +172,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
           <div className="grid grid-cols-2 gap-4">
             {/* Priority */}
             <div>
-              <label htmlFor="priority" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="priority" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 transition-colors duration-300">
                 <FiFlag className="inline h-4 w-4 mr-1" />
                 Priority
               </label>
@@ -180,7 +180,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
                 id="priority"
                 value={formData.priority}
                 onChange={(e) => handleInputChange('priority', e.target.value as TaskPriority)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors duration-300"
               >
                 {TASK_PRIORITIES.map((priority) => (
                   <option key={priority.value} value={priority.value}>
@@ -192,7 +192,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
 
             {/* Due Date */}
             <div>
-              <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="dueDate" className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 transition-colors duration-300">
                 <FiCalendar className="inline h-4 w-4 mr-1" />
                 Due Date
               </label>
@@ -204,7 +204,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
                   const newDate = e.target.value ? new Date(e.target.value) : undefined;
                   handleInputChange('dueDate', newDate as Date);
                 }}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors duration-300"
                 min={new Date().toISOString().slice(0, 16)}
               />
             </div>
@@ -212,7 +212,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
 
           {/* Tags */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1 transition-colors duration-300">
               <FiTag className="inline h-4 w-4 mr-1" />
               Tags
             </label>
@@ -223,13 +223,13 @@ export const TaskForm: React.FC<TaskFormProps> = ({
                 {formData.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-blue-100 text-blue-700 rounded-md"
+                    className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-md transition-colors duration-300"
                   >
                     {tag}
                     <button
                       type="button"
                       onClick={() => handleRemoveTag(tag)}
-                      className="hover:text-blue-900"
+                      className="hover:text-blue-900 dark:hover:text-blue-100 transition-colors duration-300"
                     >
                       <FiX className="h-3 w-3" />
                     </button>
@@ -247,18 +247,18 @@ export const TaskForm: React.FC<TaskFormProps> = ({
                 onKeyDown={handleTagKeyDown}
                 onFocus={() => setShowTagSuggestions(true)}
                 placeholder="Add tags..."
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-colors duration-300"
               />
 
               {/* Tag suggestions */}
               {showTagSuggestions && newTag && (
-                <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10 max-h-32 overflow-y-auto">
+                <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg z-10 max-h-32 overflow-y-auto transition-colors duration-300">
                   {getFilteredTagSuggestions().map((tag) => (
                     <button
                       key={tag}
                       type="button"
                       onClick={() => handleAddTag(tag)}
-                      className="w-full px-3 py-2 text-left hover:bg-gray-50 transition-colors"
+                      className="w-full px-3 py-2 text-left text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300"
                     >
                       {tag}
                     </button>
@@ -267,7 +267,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
                     <button
                       type="button"
                       onClick={() => handleAddTag(newTag)}
-                      className="w-full px-3 py-2 text-left hover:bg-gray-50 transition-colors text-blue-600"
+                      className="w-full px-3 py-2 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-300 text-blue-600 dark:text-blue-400"
                     >
                       Create "{newTag.trim()}"
                     </button>
@@ -282,7 +282,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+              className="flex-1 px-4 py-2 text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md transition-colors duration-300"
               disabled={loading}
             >
               Cancel
@@ -290,7 +290,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
             <button
               type="submit"
               disabled={loading || !formData.title.trim()}
-              className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              className="flex-1 px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-md hover:bg-blue-700 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300 flex items-center justify-center gap-2"
             >
               {loading ? (
                 <>
