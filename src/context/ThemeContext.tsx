@@ -23,7 +23,10 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   // Apply theme to document
   const applyTheme = (newTheme: Theme) => {
     document.documentElement.classList.remove('light', 'dark');
-    document.documentElement.classList.add(newTheme);
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+    // For light mode, we don't add any class (Tailwind default)
 
     // Update meta theme-color for mobile browsers
     const metaThemeColor = document.querySelector('meta[name="theme-color"]');

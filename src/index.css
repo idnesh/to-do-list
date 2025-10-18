@@ -11,8 +11,7 @@
   body {
     margin: 0;
     min-height: 100vh;
-    background-color: #f9fafb;
-    color: #111827;
+    @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-300;
   }
 
   /* Custom scrollbar */
@@ -21,16 +20,16 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #f1f5f9;
+    @apply bg-gray-100 dark:bg-gray-800;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
+    @apply bg-gray-300 dark:bg-gray-600;
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    @apply bg-gray-400 dark:bg-gray-500;
   }
 }
 
@@ -61,65 +60,65 @@
 
   /* Focus styles */
   .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+    @apply focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:ring-offset-2 dark:focus:ring-offset-gray-900;
   }
 
   /* Button variants */
   .btn-primary {
-    @apply bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors;
+    @apply bg-blue-600 dark:bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 focus-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors;
   }
 
   .btn-secondary {
-    @apply bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 focus-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors;
+    @apply bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 focus-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors;
   }
 
   .btn-danger {
-    @apply bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 focus-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors;
+    @apply bg-red-600 dark:bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-700 dark:hover:bg-red-600 focus-ring disabled:opacity-50 disabled:cursor-not-allowed transition-colors;
   }
 
   /* Input styles */
   .input-base {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+    @apply w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition-colors;
   }
 
   /* Card styles */
   .card {
-    @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6;
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 transition-colors;
   }
 
   /* Modal overlay */
   .modal-overlay {
-    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50;
+    @apply fixed inset-0 bg-black bg-opacity-50 dark:bg-black dark:bg-opacity-70 flex items-center justify-center p-4 z-50 transition-colors;
   }
 
   /* Status badges */
   .status-pending {
-    @apply bg-gray-100 text-gray-700;
+    @apply bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors;
   }
 
   .status-in-progress {
-    @apply bg-blue-100 text-blue-700;
+    @apply bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 transition-colors;
   }
 
   .status-completed {
-    @apply bg-green-100 text-green-700;
+    @apply bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300 transition-colors;
   }
 
   /* Priority badges */
   .priority-low {
-    @apply bg-gray-100 text-gray-700;
+    @apply bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 transition-colors;
   }
 
   .priority-medium {
-    @apply bg-yellow-100 text-yellow-700;
+    @apply bg-yellow-100 dark:bg-yellow-900/50 text-yellow-700 dark:text-yellow-300 transition-colors;
   }
 
   .priority-high {
-    @apply bg-orange-100 text-orange-700;
+    @apply bg-orange-100 dark:bg-orange-900/50 text-orange-700 dark:text-orange-300 transition-colors;
   }
 
   .priority-urgent {
-    @apply bg-red-100 text-red-700;
+    @apply bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300 transition-colors;
   }
 }
 
