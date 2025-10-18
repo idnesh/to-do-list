@@ -323,7 +323,7 @@ export const TaskTable: React.FC<TaskTableProps> = ({ searchQuery }) => {
       </div>
 
       {/* Scrollable Body */}
-      <div className="overflow-y-auto max-h-96">
+      <div className="overflow-y-auto" style={{ maxHeight: 'calc(100vh - 375px)' }}>
         <table className="w-full table-fixed">
           {/* Hidden header to maintain column alignment */}
           <thead className="invisible">

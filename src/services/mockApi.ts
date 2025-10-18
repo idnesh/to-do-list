@@ -104,6 +104,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Fix critical bug in authentication',
         description: 'Users are unable to login with their credentials. Priority fix needed.',
         status: 'pending',
@@ -115,6 +116,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Review code for new feature',
         description: 'Conduct thorough code review for the user dashboard feature before deployment.',
         status: 'pending',
@@ -126,6 +128,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Book dentist appointment',
         description: 'Schedule annual dental checkup and cleaning.',
         status: 'pending',
@@ -137,6 +140,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Update resume and LinkedIn profile',
         description: 'Add recent projects and skills to resume and LinkedIn profile.',
         status: 'in_progress',
@@ -148,6 +152,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Plan weekend trip',
         description: 'Research and book hotel for weekend getaway to the mountains.',
         status: 'completed',
@@ -159,6 +164,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Database optimization',
         description: 'Optimize database queries for better performance on the analytics dashboard.',
         status: 'in_progress',
@@ -170,6 +176,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Call mom',
         description: 'Weekly check-in call with mom to catch up.',
         status: 'pending',
@@ -181,6 +188,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Prepare quarterly report',
         description: 'Compile data and insights for Q4 business review presentation.',
         status: 'pending',
@@ -192,6 +200,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Learn Docker containerization',
         description: 'Complete online course on Docker and containerization fundamentals.',
         status: 'in_progress',
@@ -203,6 +212,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Setup CI/CD pipeline',
         description: 'Configure automated testing and deployment pipeline for the new microservice.',
         status: 'pending',
@@ -214,6 +224,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Exercise routine',
         description: 'Go to the gym for cardio and strength training session.',
         status: 'completed',
@@ -225,6 +236,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Security audit',
         description: 'Conduct comprehensive security audit of user authentication system.',
         status: 'pending',
@@ -236,6 +248,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Refactor legacy code',
         description: 'Modernize and refactor the payment processing module for better maintainability.',
         status: 'in_progress',
@@ -247,6 +260,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Birthday party planning',
         description: 'Organize surprise birthday party for Sarah including venue, catering, and guest list.',
         status: 'completed',
@@ -258,6 +272,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'API documentation update',
         description: 'Update API documentation with new endpoints and authentication methods.',
         status: 'pending',
@@ -269,6 +284,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Implement real-time notifications system with WebSocket integration',
         description: 'Design and develop a comprehensive real-time notification system supporting push notifications, email alerts, and in-app messaging with proper queue management, retry logic, and delivery confirmation tracking.',
         status: 'in_progress',
@@ -280,6 +296,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Complete comprehensive financial audit and tax preparation for Q4 2024',
         description: 'Gather all financial documents, receipts, and investment statements. Review expense categories, calculate quarterly tax obligations, prepare documentation for accountant meeting, and organize digital filing system for future reference.',
         status: 'pending',
@@ -291,6 +308,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Research and implement advanced caching strategies for microservices architecture',
         description: 'Evaluate Redis Cluster vs MongoDB caching, implement distributed cache invalidation patterns, set up cache warming strategies, configure TTL policies, and establish monitoring for cache hit/miss ratios across multiple service instances.',
         status: 'pending',
@@ -302,6 +320,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Organize multi-day conference presentation on "Building Resilient Distributed Systems"',
         description: 'Prepare 45-minute technical presentation covering fault tolerance patterns, circuit breakers, bulkhead isolation, and chaos engineering. Create interactive demos, design slides with code examples, practice delivery, and prepare for Q&A session.',
         status: 'in_progress',
@@ -313,6 +332,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Complete home renovation project: kitchen and bathroom modernization',
         description: 'Coordinate with contractors for cabinet installation, tile work, plumbing updates, electrical rewiring for new appliances, and final inspection. Track budget, timeline, and ensure all permits are properly filed.',
         status: 'in_progress',
@@ -324,6 +344,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Design and implement comprehensive test automation framework',
         description: 'Build end-to-end testing suite using Playwright, implement visual regression testing, set up performance benchmarking, create test data factories, establish CI/CD integration with parallel test execution, and configure detailed reporting dashboard.',
         status: 'pending',
@@ -335,6 +356,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Learn advanced machine learning algorithms and implement recommendation engine',
         description: 'Study collaborative filtering, matrix factorization, deep learning approaches for recommendations. Implement prototype using TensorFlow, create evaluation metrics, gather training data, and build A/B testing framework for model comparison.',
         status: 'in_progress',
@@ -346,6 +368,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Establish emergency preparedness plan and disaster recovery procedures',
         description: 'Create comprehensive family emergency plan including evacuation routes, communication protocols, supply inventory, document backup strategies, financial emergency fund planning, and regular drill scheduling.',
         status: 'pending',
@@ -357,6 +380,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Migrate legacy monolith to cloud-native microservices architecture',
         description: 'Analyze existing codebase dependencies, design service boundaries using domain-driven design, implement API gateways, set up service mesh, configure observability stack, plan zero-downtime migration strategy, and establish rollback procedures.',
         status: 'in_progress',
@@ -368,6 +392,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Complete advanced certification in cloud security and compliance frameworks',
         description: 'Study for AWS Security Specialty certification, learn GDPR compliance requirements, understand SOC2 Type II auditing processes, practice with hands-on labs, schedule exam, and update professional credentials.',
         status: 'in_progress',
@@ -379,6 +404,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Develop comprehensive data analytics platform with real-time dashboards',
         description: 'Build ETL pipelines using Apache Kafka, implement data warehouse with Snowflake, create interactive dashboards using D3.js, set up automated reporting, configure data quality monitoring, and establish data governance policies.',
         status: 'pending',
@@ -390,6 +416,7 @@ class MockApiService {
       },
       {
         id: generateId(),
+        userId,
         title: 'Plan and execute comprehensive digital detox and mindfulness retreat',
         description: 'Research retreat locations, book accommodations, plan daily meditation schedules, prepare offline activities, set up automatic email responses, delegate work responsibilities, and create post-retreat integration plan.',
         status: 'completed',
